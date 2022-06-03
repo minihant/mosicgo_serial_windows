@@ -9,34 +9,31 @@ class Setting {
   PortLib _PortLib = PortLib();
 
   void Fn_showPortInfo(BuildContext context) {
+    int items = global.ports.length;
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Select ComPort"),
+            title: const Text("Select Port"),
             content: SizedBox(
               width: double.minPositive,
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: global.ports.length,
+                itemCount: items,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(global.ports[index]),
-                    onTap: () async {
-                      global.selectedPort = global.ports[index];
-                      var result = _PortLib.Fn_openPort();
-                      if (result == true) {
-                        global.statusText = global.selectedPort;
-                      } else {
-                        global.statusText = "Can Not Open";
-                      }
-                      // setState(() {
-                      // result
-                      //     ? (global.statusText = global.selectedPort)
-                      //     : (global.statusText = "Can Not Open");
-                      // });
-                      Navigator.pop(context);
-                    },
+                  return Card(
+                    child: ListTile(
+                      title: Text(global.ports[index]),
+                      onTap: () async {
+                        global.selectedPort = global.ports[index];
+                        var result = _PortLib.Fn_openPort(context);
+                        result
+                            ? (global.statusText = global.selectedPort)
+                            : (global.statusText = "Can Not Open");
+
+                        Navigator.pop(context);
+                      },
+                    ),
                   );
                 },
               ),

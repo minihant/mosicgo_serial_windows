@@ -1,7 +1,18 @@
+import 'package:flutter/material.dart';
+
 import 'package:serial_port_win32/serial_port_win32.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+
+import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'key.dart';
 import 'global.dart' as global;
+
+class PortStatus with ChangeNotifier {
+  get portStatus => global.statusText;
+  void setStatus(String msg) {
+    global.statusText = msg;
+  }
+}
 
 class PortLib {
   late SerialPort port;
@@ -57,7 +68,7 @@ class PortLib {
     }
   }
 
-  bool Fn_openPort() {
+  bool Fn_openPort(BuildContext context) {
     port = SerialPort(
       global.selectedPort,
       BaudRate: 115200,
@@ -75,9 +86,11 @@ class PortLib {
         Fn_dataParser(value);
       };
       debugPrint("Open(${port.isOpened}) : ${port.portName}");
+      global.statusText = port.portName;
+
       return true;
     } catch (e) {
-      debugPrint("open error ${e}");
+      debugPrint("open error ${e.toString()}");
       return false;
     }
   }
@@ -85,9 +98,17 @@ class PortLib {
   void Fn_closePort() {
     port = SerialPort(global.selectedPort);
     port.close();
-    // setState(() {
-    //   statusText = "Port Not Open";
-    // });
+
+    global.statusText = "Port Not Open";
+
     debugPrint("Close : ${port.portName}");
   }
 }
+
+
+// class PoetWidget extends StatefulWidget {
+//   @override
+//   _PoetWidget createState() => _PoetWidget();
+// }
+
+// class _PoetWidget extends State<PortStatus> {}

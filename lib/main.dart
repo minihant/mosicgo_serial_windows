@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'key.dart';
 import 'dialogLib.dart';
 import 'global.dart' as global;
@@ -51,9 +52,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DialogLib _DialogLib = DialogLib();
-  PortLib _PortLib = PortLib();
-  Setting _Setting = Setting();
+  final DialogLib _DialogLib = DialogLib();
+  final PortLib _PortLib = PortLib();
+  final Setting _Setting = Setting();
 
   void Fn_startPollingTimer() {
     int counter = 0;
@@ -67,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       debugPrint("timer($counter)");
       counter++;
+      setState(() {});
     });
   }
 
@@ -116,31 +118,35 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(600, 800));
     ScreenUtil().setSp(16 * ScreenUtil().scaleWidth);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(fontSize: 28.sp),
+
+    return ChangeNotifierProvider(
+      create: (BuildContext context) {},
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.title,
+            style: TextStyle(fontSize: 28.sp),
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                Text(global.MCU_ver, style: TextStyle(fontSize: 16.sp)),
+              ],
+            ),
+            SizedBox(width: 20.sp),
+            Row(
+              children: [
+                Text(global.statusText, style: TextStyle(fontSize: 24.sp)),
+              ],
+            ),
+            _Setting.widget_selectPort(context),
+          ],
         ),
-        actions: <Widget>[
-          Row(
-            children: [
-              Text(global.MCU_ver, style: TextStyle(fontSize: 16.sp)),
-            ],
-          ),
-          SizedBox(width: 20.sp),
-          Row(
-            children: [
-              Text(global.statusText, style: TextStyle(fontSize: 24.sp)),
-            ],
-          ),
-          _Setting.widget_selectPort(context),
-        ],
-      ),
-      body: Row(
-        children: [
-          widget_writeData(),
-        ],
+        body: Row(
+          children: [
+            widget_writeData(),
+          ],
+        ),
       ),
     );
   }
