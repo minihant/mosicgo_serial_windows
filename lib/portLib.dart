@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:serial_port_win32/serial_port_win32.dart';
 
-import 'package:provider/provider.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'key.dart';
 import 'global.dart' as global;
 
@@ -46,7 +44,7 @@ class PortLib {
   }
 
   Future<void> Fn_writeMsg(String msg) async {
-    String data = '${msg}\r\n';
+    String data = '$msg\r\n';
     if (port.isOpened) {
       port.writeBytesFromString(data);
     }
@@ -55,7 +53,7 @@ class PortLib {
   void Fn_dataParser(var value) {
     if (value[0] == 10) {
       String msg = String.fromCharCodes(inBytes);
-      debugPrint("${msg}");
+      debugPrint(msg);
       //----------------------------------------
       if (msg.contains('SW Version:')) {
         global.MCU_ver = msg.replaceAll('SW Version:', '');

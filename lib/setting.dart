@@ -5,8 +5,8 @@ import 'dialogLib.dart';
 import 'portLib.dart';
 
 class Setting {
-  DialogLib _DialogLib = DialogLib();
-  PortLib _PortLib = PortLib();
+  final DialogLib _DialogLib = DialogLib();
+  final PortLib _PortLib = PortLib();
 
   void Fn_showPortInfo(BuildContext context) {
     int items = global.ports.length;

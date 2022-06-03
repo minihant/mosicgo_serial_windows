@@ -110,11 +110,11 @@ class DialogLib {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close', style: TextStyle(fontSize: 24.sp)),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black),
                     foregroundColor: MaterialStateProperty.all(Colors.white),
                   ),
+                  child: Text('Close', style: TextStyle(fontSize: 24.sp)),
                 ),
               ],
             ));
